@@ -1,6 +1,7 @@
 import { Item } from '@/models/Item';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { client } from './create';
+import { ObjectId } from 'mongodb';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,9 +9,9 @@ export default async function handler(
 ) {
   switch (req.method) {
     case 'PUT':
-      const { itemName, ItemDescription, ItemPrice, ItemImage, ItemID } =
+      const { itemName, itemDescription, itemPrice, itemImage, itemID } =
         req.body;
-      if (!itemName || !ItemDescription || !ItemPrice || !ItemID)
+      if (!itemName || !itemDescription || !itemPrice || !itemID)
         return res
           .status(400)
           .json({ message: 'Parâmetros obrigatórios não informados!' });
@@ -18,19 +19,19 @@ export default async function handler(
         await updateItem(
           {
             itemName,
-            ItemDescription,
-            ItemPrice,
-            ItemImage,
+            itemDescription,
+            itemPrice,
+            itemImage,
           },
-          ItemID
+          itemID
         );
         res.status(200).json({
           message: 'item editado com sucesso!',
           item: {
             name: itemName,
-            description: ItemDescription,
-            price: ItemPrice,
-            image: ItemImage,
+            description: itemDescription,
+            price: itemPrice,
+            image: itemImage,
           },
         });
       } catch (error) {
@@ -50,12 +51,14 @@ const updateItem = async (item: Item, itemID: string) => {
       .db('coffeeShowDB')
       .collection('items')
       .updateOne(
-        { _id: Object(itemID) },
+        { _id: new ObjectId(itemID) },
         {
-          name: item.itemName,
-          description: item.ItemDescription,
-          image: item.ItemImage,
-          price: item.ItemPrice,
+          $set: {
+            name: item.itemName,
+            description: item.itemDescription,
+            image: item.itemImage,
+            price: item.itemPrice,
+          },
         }
       );
   } catch (error) {
