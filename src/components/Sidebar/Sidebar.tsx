@@ -7,10 +7,11 @@ export const Sidebar = () => {
     <Flex
       minH="100vh"
       bg="#d9caad"
-      w="280px"
+      w="320px"
       direction="column"
       justify="flex-start"
       align="center"
+      position="fixed"
     >
       <Image src={'/logo.png'} alt={''} width={250} height={250} />
       <Flex
