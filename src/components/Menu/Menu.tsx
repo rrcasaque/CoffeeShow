@@ -17,7 +17,15 @@ export const Menu = () => {
   }, []);
 
   return (
-    <Flex minH="100vh" w="full" ml="320px" wrap="wrap" justify="space-around">
+    <Flex
+      minH="100vh"
+      w="full"
+      ml="320px"
+      wrap="wrap"
+      justify="space-around"
+      // bg="#3a2215"
+      backgroundImage="https://www.creativefabrica.com/wp-content/uploads/2023/10/01/Rustic-Wood-Background-Seamless-Pattern-Graphics-80558264-3-580x435.png"
+    >
       {itemsList &&
         itemsList.map((item) => {
           return (
