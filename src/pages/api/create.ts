@@ -16,25 +16,25 @@ export default async function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      const { itemName, ItemDescription, ItemPrice, ItemImage } = req.body;
-      if (!itemName || !ItemDescription || !ItemPrice)
+      const { itemName, itemDescription, itemPrice, itemImage } = req.body;
+      if (!itemName || !itemDescription || !itemPrice)
         return res
           .status(400)
           .json({ message: 'Parâmetros obrigatórios não informados!' });
       try {
         await createItem({
           itemName,
-          ItemDescription,
-          ItemPrice,
-          ItemImage,
+          itemDescription,
+          itemPrice,
+          itemImage,
         });
         res.status(201).json({
           message: 'criado!',
           item: {
             name: itemName,
-            description: ItemDescription,
-            price: ItemPrice,
-            image: ItemImage,
+            description: itemDescription,
+            price: itemPrice,
+            image: itemImage,
           },
         });
       } catch (error) {
@@ -52,9 +52,9 @@ const createItem = async (item: Item) => {
     await client.connect();
     await client.db('coffeeShowDB').collection('items').insertOne({
       name: item.itemName,
-      description: item.ItemDescription,
-      image: item.ItemImage,
-      price: item.ItemPrice,
+      description: item.itemDescription,
+      image: item.itemImage,
+      price: item.itemPrice,
     });
   } catch (error) {
     return error;
