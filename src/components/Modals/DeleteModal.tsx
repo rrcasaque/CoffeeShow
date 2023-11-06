@@ -7,6 +7,7 @@ import {
   Text,
   Button,
   Flex,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -16,6 +17,7 @@ interface DeleteModalProps {
 }
 
 export const DeleteModal = (props: DeleteModalProps) => {
+  const toast = useToast();
   return (
     <ModalContent minW="380px">
       <ModalHeader>Confirmação de exclusão</ModalHeader>
@@ -30,18 +32,33 @@ export const DeleteModal = (props: DeleteModalProps) => {
             alignSelf="flex-end"
             mt="12px"
             onClick={async () => {
-              await axios.delete('/api/delete', {
-                data: {
-                  itemID: props.id,
-                },
-              });
-              const updatedList = useItemStore
-                .getState()
-                .items.filter((item) => {
-                  if (item._id !== props.id) return item;
+              try {
+                await axios.delete('/api/delete', {
+                  data: {
+                    itemID: props.id,
+                  },
                 });
-              useItemStore.setState({ items: updatedList });
-              props.onClose();
+                const updatedList = useItemStore
+                  .getState()
+                  .items.filter((item) => {
+                    if (item._id !== props.id) return item;
+                  });
+                useItemStore.setState({ items: updatedList });
+                props.onClose();
+              } catch (e) {
+                toast({
+                  title: 'Erro ao deletar item',
+                  status: 'error',
+                  duration: 5000,
+                  isClosable: true,
+                })
+              }
+              toast({
+                title: 'Item deletado com sucesso!',
+                status: 'success',
+                duration: 5000,
+                isClosable: true,
+              })
             }}
           >
             Excluir
