@@ -18,10 +18,10 @@ export default async function handler(
       try {
         await updateItem(
           {
-            itemName,
-            itemDescription,
-            itemPrice,
-            itemImage,
+            name: itemName,
+            description: itemDescription,
+            price: itemPrice,
+            image: itemImage,
           },
           itemID
         );
@@ -54,10 +54,10 @@ const updateItem = async (item: Item, itemID: string) => {
         { _id: new ObjectId(itemID) },
         {
           $set: {
-            name: item.itemName,
-            description: item.itemDescription,
-            image: item.itemImage,
-            price: item.itemPrice,
+            name: item.name,
+            description: item.description,
+            image: item.image,
+            price: item.price,
           },
         }
       );
