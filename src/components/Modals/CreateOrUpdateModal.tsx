@@ -13,6 +13,7 @@ import {
   FormErrorMessage,
   VStack,
   Box,
+  useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,7 +26,8 @@ import { convertToBase64 } from '@/utils/convert/convertToBase64';
 import { useItemStore } from '@/context/ItemStore';
 
 interface CreateOrUpdateModalProps {
-  itemSelected?: Item;
+onClose: () => void;
+itemSelected?: Item;
 }
 
 export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
@@ -35,6 +37,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
   const [itemImage, setItemImage] = useState<File>();
   const [fileError, setFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const {
     handleSubmit,
@@ -49,8 +52,6 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
       image: 'a',
     },
   });
-
-  console.log(props.itemSelected);
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
@@ -87,11 +88,33 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           });
           useItemStore.setState({ items: itemList });
         }
-      } catch (error) {}
+        props.onClose();
+        toast({
+          title: 'Item alterado com sucesso!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      } catch (error) {
+        props.onClose();
+        toast({
+          title: 'Erro ao alterar item',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     } else {
       try {
         const base64 = await convertToBase64(itemImage as File);
         const insertedItem = await axios.post('/api/create', {
+          itemName: name,
+          itemDescription: description,
+          itemPrice: parseFloat(price),
+          itemImage: 'data:image/jpeg;base64,' + base64,
+        });
+
+        console.log({
           itemName: name,
           itemDescription: description,
           itemPrice: parseFloat(price),
@@ -107,7 +130,22 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           image: 'data:image/jpeg;base64,' + base64,
         });
         useItemStore.setState({ items: itemList });
-      } catch (error) {}
+        props.onClose();
+        toast({
+          title: 'Item adicionado com sucesso!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      } catch (error) {
+        props.onClose();
+        toast({
+          title: 'Erro ao adicionar item',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     }
     setIsLoading(false);
   };
@@ -130,8 +168,15 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
         <Flex
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit(onSubmit)();
-            if (!itemImage && !props.itemSelected) setFileError(true);
+            handleSubmit(()=>{
+              if (!itemImage && !props.itemSelected || fileError) setFileError(true)
+              else
+              onSubmit({
+                name: itemName,
+                price: itemPrice,
+                description: itemDescription,
+            })
+            })();
           }}
           w="full"
           as="form"
@@ -213,6 +258,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 )}
                 <Input
                   type="file"
+                  accept='.jpg, .png, .jpeg'
                   w="400px"
                   marginTop="1"
                   {...register('image')}
@@ -222,11 +268,14 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                         ? e.currentTarget.files[0]
                         : undefined
                     );
-                    setFileError(false);
+                    e.currentTarget.files && (((e.currentTarget.files[0].size/1024)/1024).toFixed(4)).toString() <= "1"
+                      ? setFileError(false)
+                      : setFileError(true)
                   }}
                 />
                 <FormErrorMessage mt="0">
-                  {fileError && !props.itemSelected && 'Foto obrigatória'}
+                  {fileError && !props.itemSelected && itemImage? 'Foto deve ser menor que 1MB' : 'Foto é obrigatória'}
+                  {fileError && props.itemSelected && 'Foto deve ser menor que 1MB'}
                 </FormErrorMessage>
               </FormControl>
             </VStack>

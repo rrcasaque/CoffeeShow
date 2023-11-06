@@ -84,11 +84,12 @@ export const TableItemModal = (props: TableItemModalPorps) => {
                                   image: item.image,
                                   _id: item._id,
                                 }}
+                                onClose={onClose}
                               />
                             );
                       }}
                       bg={
-                        props.modalType === 'delete' ? 'red.400' : 'yellow.800'
+                        props.modalType === 'delete' ? 'red.400' : 'blue.500'
                       }
                       fontSize="16px"
                       align="center"
