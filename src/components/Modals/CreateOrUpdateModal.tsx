@@ -51,7 +51,6 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
   });
 
   const onSubmit = async (data: any) => {
-    if (!itemImage && !props.itemSelected) setFileError(true);
     setIsLoading(true);
     const { name, description, price } = data;
     if (props.itemSelected) {
@@ -125,7 +124,11 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
       <ModalCloseButton />
       <ModalBody w="full" flexDirection="column">
         <Flex
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(onSubmit)();
+            if (!itemImage && !props.itemSelected) setFileError(true);
+          }}
           w="full"
           as="form"
           direction="column"
