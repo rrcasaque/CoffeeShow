@@ -84,6 +84,7 @@ export const TableItemModal = (props: TableItemModalPorps) => {
                                   image: item.image,
                                   _id: item._id,
                                 }}
+                                onClose={onClose}
                               />
                             );
                       }}

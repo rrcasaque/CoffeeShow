@@ -25,6 +25,7 @@ import { convertToBase64 } from '@/utils/convert/convertToBase64';
 import { useItemStore } from '@/context/ItemStore';
 
 interface CreateOrUpdateModalProps {
+  onClose: () => void;
   itemSelected?: Item;
 }
 
