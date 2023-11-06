@@ -42,7 +42,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(CreateOrUpdateSchema),
-    defaultValues: {
+    defaultValues: props.itemSelected && {
       name: 'a',
       description: 'a',
       price: '0',
