@@ -22,7 +22,7 @@ export default async function handler(
           .status(400)
           .json({ message: 'Parâmetros obrigatórios não informados!' });
       try {
-        await createItem({
+        const id = await createItem({
           name: itemName,
           description: itemDescription,
           price: itemPrice,
@@ -31,6 +31,7 @@ export default async function handler(
         res.status(201).json({
           message: 'criado!',
           item: {
+            _id: id,
             name: itemName,
             description: itemDescription,
             price: itemPrice,
@@ -50,12 +51,16 @@ export default async function handler(
 const createItem = async (item: Item) => {
   try {
     await client.connect();
-    await client.db('coffeeShowDB').collection('items').insertOne({
-      name: item.name,
-      description: item.description,
-      image: item.image,
-      price: item.price,
-    });
+    const itemInserted = await client
+      .db('coffeeShowDB')
+      .collection('items')
+      .insertOne({
+        name: item.name,
+        description: item.description,
+        image: item.image,
+        price: item.price,
+      });
+    return itemInserted.insertedId.toString();
   } catch (error) {
     return error;
   }
