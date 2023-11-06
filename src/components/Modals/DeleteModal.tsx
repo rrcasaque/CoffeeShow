@@ -35,8 +35,12 @@ export const DeleteModal = (props: DeleteModalProps) => {
                   itemID: props.id,
                 },
               });
-              const updatedList = await axios.get('/api/read');
-              useItemStore.setState({ items: updatedList.data });
+              const updatedList = useItemStore
+                .getState()
+                .items.filter((item) => {
+                  if (item._id !== props.id) return item;
+                });
+              useItemStore.setState({ items: updatedList });
               props.onClose();
             }}
           >
