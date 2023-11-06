@@ -13,6 +13,7 @@ import {
   FormErrorMessage,
   VStack,
   Box,
+  useToast,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -25,8 +26,8 @@ import { convertToBase64 } from '@/utils/convert/convertToBase64';
 import { useItemStore } from '@/context/ItemStore';
 
 interface CreateOrUpdateModalProps {
-  onClose: () => void;
-  itemSelected?: Item;
+onClose: () => void;
+itemSelected?: Item;
 }
 
 export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
@@ -36,6 +37,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
   const [itemImage, setItemImage] = useState<File>();
   const [fileError, setFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
 
   const {
     handleSubmit,
@@ -88,7 +90,22 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           });
           useItemStore.setState({ items: itemList });
         }
-      } catch (error) {}
+        props.onClose();
+        toast({
+          title: 'Item alterado com sucesso!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      } catch (error) {
+        props.onClose();
+        toast({
+          title: 'Erro ao alterar item',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     } else {
       try {
         const base64 = await convertToBase64(itemImage as File);
@@ -108,7 +125,22 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           image: 'data:image/jpeg;base64,' + base64,
         });
         useItemStore.setState({ items: itemList });
-      } catch (error) {}
+        props.onClose();
+        toast({
+          title: 'Item adicionado com sucesso!',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
+      } catch (error) {
+        props.onClose();
+        toast({
+          title: 'Erro ao adicionar item',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
     }
     setIsLoading(false);
   };
