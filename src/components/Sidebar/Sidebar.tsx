@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { TableItemModal } from '../Modals/TableItemModal';
 import { CustomModal } from '../Modals/CustomModal';
 import { useItemStore } from '@/context/ItemStore';
+import { CreateOrUpdateModal } from '../Modals/CreateOrUpdateModal';
 
 export const Sidebar = () => {
   const [modal, setModal] = useState<JSX.Element>(<></>);
@@ -92,23 +93,13 @@ const changeModal = (
   onOpen();
   switch (id) {
     case 'create':
-      setModal(<TableItemModal items={[]} modalType={'delete'} />);
+      setModal(<CreateOrUpdateModal />);
       break;
     case 'update':
-      setModal(
-        <TableItemModal
-          items={useItemStore.getState().items}
-          modalType={'update'}
-        />
-      );
+      setModal(<TableItemModal modalType={'update'} />);
       break;
     case 'delete':
-      setModal(
-        <TableItemModal
-          items={useItemStore.getState().items}
-          modalType={'delete'}
-        />
-      );
+      setModal(<TableItemModal modalType={'delete'} />);
       break;
   }
 };
