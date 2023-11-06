@@ -12,14 +12,25 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { CustomModal } from './CustomModal';
+import { DeleteModal } from './DeleteModal';
+import { useState } from 'react';
+import { useItemStore } from '@/context/ItemStore';
+import { CreateOrUpdateModal } from './CreateOrUpdateModal';
 
 interface TableItemModalPorps {
-  items: Item[];
   modalType: 'update' | 'delete';
 }
 
 export const TableItemModal = (props: TableItemModalPorps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [id, setId] = useState('');
+  const [modal, setModal] = useState<JSX.Element>(<></>);
+
+  const itemsList = useItemStore.getState().items;
+
   return (
     <ModalContent minW="1000px">
       <ModalHeader>Itens cadastrados</ModalHeader>
@@ -36,7 +47,7 @@ export const TableItemModal = (props: TableItemModalPorps) => {
             </Tr>
           </Thead>
           <Tbody>
-            {props.items.map((item) => {
+            {itemsList.map((item) => {
               return (
                 <Tr key={item._id}>
                   <Td textAlign="center">{item.name}</Td>
@@ -53,8 +64,29 @@ export const TableItemModal = (props: TableItemModalPorps) => {
                   </Td>
                   <Td>
                     <Text
+                      id={item._id}
                       _hover={{ cursor: 'pointer' }}
-                      onClick={() => {}}
+                      onClick={(e) => {
+                        onOpen();
+                        props.modalType === 'delete'
+                          ? setModal(
+                              <DeleteModal
+                                id={e.currentTarget.id}
+                                onClose={onClose}
+                              />
+                            )
+                          : setModal(
+                              <CreateOrUpdateModal
+                                itemSelected={{
+                                  name: item.name,
+                                  price: item.price,
+                                  description: item.description,
+                                  image: item.image,
+                                  _id: item._id,
+                                }}
+                              />
+                            );
+                      }}
                       bg={
                         props.modalType === 'delete' ? 'red.400' : 'yellow.800'
                       }
@@ -75,6 +107,9 @@ export const TableItemModal = (props: TableItemModalPorps) => {
             </Tr>
           </Tbody>
         </Table>
+        <CustomModal isOpen={isOpen} onClose={onClose}>
+          {modal}
+        </CustomModal>
       </ModalBody>
     </ModalContent>
   );
