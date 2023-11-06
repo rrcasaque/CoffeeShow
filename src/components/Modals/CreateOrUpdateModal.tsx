@@ -114,6 +114,13 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           itemImage: 'data:image/jpeg;base64,' + base64,
         });
 
+        console.log({
+          itemName: name,
+          itemDescription: description,
+          itemPrice: parseFloat(price),
+          itemImage: 'data:image/jpeg;base64,' + base64,
+        });
+
         const itemList = useItemStore.getState().items;
         itemList.push({
           _id: insertedItem.data.item._id,
@@ -161,8 +168,15 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
         <Flex
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit(onSubmit)();
-            if (!itemImage && !props.itemSelected) setFileError(true);
+            handleSubmit(()=>{
+              if (!itemImage && !props.itemSelected || fileError) setFileError(true)
+              else
+              onSubmit({
+                name: itemName,
+                price: itemPrice,
+                description: itemDescription,
+            })
+            })();
           }}
           w="full"
           as="form"
@@ -244,6 +258,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 )}
                 <Input
                   type="file"
+                  accept='.jpg, .png, .jpeg'
                   w="400px"
                   marginTop="1"
                   {...register('image')}
@@ -253,11 +268,14 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                         ? e.currentTarget.files[0]
                         : undefined
                     );
-                    setFileError(false);
+                    e.currentTarget.files && (((e.currentTarget.files[0].size/1024)/1024).toFixed(4)).toString() <= "1"
+                      ? setFileError(false)
+                      : setFileError(true)
                   }}
                 />
                 <FormErrorMessage mt="0">
-                  {fileError && !props.itemSelected && 'Foto obrigatória'}
+                  {fileError && !props.itemSelected && itemImage? 'Foto deve ser menor que 1MB' : 'Foto é obrigatória'}
+                  {fileError && props.itemSelected && 'Foto deve ser menor que 1MB'}
                 </FormErrorMessage>
               </FormControl>
             </VStack>
