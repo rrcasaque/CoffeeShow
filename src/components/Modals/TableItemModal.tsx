@@ -89,7 +89,7 @@ export const TableItemModal = (props: TableItemModalPorps) => {
                             );
                       }}
                       bg={
-                        props.modalType === 'delete' ? 'red.400' : 'yellow.800'
+                        props.modalType === 'delete' ? 'red.400' : 'blue.500'
                       }
                       fontSize="16px"
                       align="center"
