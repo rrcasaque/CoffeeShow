@@ -11,6 +11,7 @@ export default async function handler(
     case 'PUT':
       const { itemName, itemDescription, itemPrice, itemImage, itemID } =
         req.body;
+
       if (!itemName || !itemDescription || !itemPrice || !itemID)
         return res
           .status(400)
@@ -53,12 +54,18 @@ const updateItem = async (item: Item, itemID: string) => {
       .updateOne(
         { _id: new ObjectId(itemID) },
         {
-          $set: {
-            name: item.name,
-            description: item.description,
-            image: item.image,
-            price: item.price,
-          },
+          $set: item.image
+            ? {
+                name: item.name,
+                description: item.description,
+                image: item.image,
+                price: item.price,
+              }
+            : {
+                name: item.name,
+                description: item.description,
+                price: item.price,
+              },
         }
       );
   } catch (error) {
