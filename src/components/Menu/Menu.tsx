@@ -11,7 +11,7 @@ export const Menu = () => {
       ml="320px"
       wrap="wrap"
       justify="center"
-      backgroundImage="https://www.creativefabrica.com/wp-content/uploads/2023/10/01/Rustic-Wood-Background-Seamless-Pattern-Graphics-80558264-3-580x435.png"
+      backgroundImage='/rusticWoodBackground.png'
     >
       {items.map((item) => {
         return (
