@@ -50,6 +50,8 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
     },
   });
 
+  console.log(props.itemSelected);
+
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     const { name, description, price } = data;
@@ -89,14 +91,16 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
     } else {
       try {
         const base64 = await convertToBase64(itemImage as File);
-        await axios.post('/api/create', {
+        const insertedItem = await axios.post('/api/create', {
           itemName: name,
           itemDescription: description,
           itemPrice: parseFloat(price),
           itemImage: 'data:image/jpeg;base64,' + base64,
         });
+
         const itemList = useItemStore.getState().items;
         itemList.push({
+          _id: insertedItem.data.item._id,
           name: name,
           description: description,
           price: parseFloat(price),
