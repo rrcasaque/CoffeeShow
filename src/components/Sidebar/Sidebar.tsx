@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { TableItemModal } from '../Modals/TableItemModal';
 import { CustomModal } from '../Modals/CustomModal';
-import { useItemStore } from '@/context/ItemStore';
 import { CreateOrUpdateModal } from '../Modals/CreateOrUpdateModal';
 
 export const Sidebar = () => {
@@ -39,7 +38,7 @@ export const Sidebar = () => {
           align="center"
           id="create"
           onClick={(e) => {
-            changeModal(e.currentTarget.id, setModal, onOpen);
+            changeModal(e.currentTarget.id, setModal, onOpen, onClose);
           }}
         >
           <PlusSquareIcon />
@@ -55,7 +54,7 @@ export const Sidebar = () => {
           align="center"
           id="update"
           onClick={(e) => {
-            changeModal(e.currentTarget.id, setModal, onOpen);
+            changeModal(e.currentTarget.id, setModal, onOpen, onClose);
           }}
         >
           <EditIcon />
@@ -71,7 +70,7 @@ export const Sidebar = () => {
           align="center"
           id="delete"
           onClick={(e) => {
-            changeModal(e.currentTarget.id, setModal, onOpen);
+            changeModal(e.currentTarget.id, setModal, onOpen, onClose);
           }}
         >
           <DeleteIcon />
@@ -88,12 +87,13 @@ export const Sidebar = () => {
 const changeModal = (
   id: string,
   setModal: React.Dispatch<React.SetStateAction<JSX.Element>>,
-  onOpen: () => void
+  onOpen: () => void,
+  onClose: () => void
 ) => {
   onOpen();
   switch (id) {
     case 'create':
-      setModal(<CreateOrUpdateModal />);
+      setModal(<CreateOrUpdateModal onClose={onClose} />);
       break;
     case 'update':
       setModal(<TableItemModal modalType={'update'} />);
