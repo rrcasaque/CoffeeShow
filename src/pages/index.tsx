@@ -5,7 +5,7 @@ import axios from 'axios';
 import { InferGetServerSidePropsType } from 'next';
 
 export const getServerSideProps = async () => {
-  const listItems = await axios.get('http://localhost:3000/api/read');
+  const listItems = await axios.get('https://coffee-show.vercel.app/api/read');
   return {
     props: {
       listItems: listItems.data,
