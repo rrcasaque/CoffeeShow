@@ -53,8 +53,6 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
     },
   });
 
-  console.log(props.itemSelected);
-
   const onSubmit = async (data: any) => {
     setIsLoading(true);
     const { name, description, price } = data;
