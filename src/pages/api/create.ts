@@ -39,7 +39,7 @@ export default async function handler(
           },
         });
       } catch (error) {
-        res.status(500).json({ error: 'erro inesperado' });
+        res.status(400).json({ error: 'erro inesperado' });
       }
       break;
     default:

@@ -17,7 +17,7 @@ export default async function handler(
         await deleteItem(itemID);
         res.status(200).json({ message: 'item deletado com sucesso!' });
       } catch (error) {
-        res.status(500).json({ error: 'erro inesperado' });
+        res.status(400).json({ error: 'erro inesperado' });
       }
       break;
     default:

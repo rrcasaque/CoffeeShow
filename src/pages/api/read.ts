@@ -11,7 +11,7 @@ export default async function handler(
         const listItems = await readItem();
         return res.status(200).json(listItems);
       } catch (error) {
-        res.status(500).json({ error: 'erro inesperado' });
+        res.status(400).json({ error: 'erro inesperado' });
       }
       break;
     default:
