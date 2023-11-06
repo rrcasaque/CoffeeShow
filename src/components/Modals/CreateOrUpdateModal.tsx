@@ -40,36 +40,52 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
     handleSubmit,
     register,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(CreateOrUpdateSchema) });
+  } = useForm({
+    resolver: yupResolver(CreateOrUpdateSchema),
+    defaultValues: {
+      name: 'a',
+      description: 'a',
+      price: '0',
+      image: 'a',
+    },
+  });
 
   const onSubmit = async (data: any) => {
-    if (!itemImage) setFileError(true);
+    if (!itemImage && !props.itemSelected) setFileError(true);
     setIsLoading(true);
     const { name, description, price } = data;
     if (props.itemSelected) {
       try {
-        const base64 = await convertToBase64(itemImage as File);
+        const base64 = !props.itemSelected
+          ? await convertToBase64(itemImage as File)
+          : itemImage && (await convertToBase64(itemImage as File));
         await axios.put('/api/update', {
           itemID: props.itemSelected._id,
-          itemName: name,
-          itemDescription: description,
-          itemPrice: parseFloat(price),
-          itemImage: 'data:image/jpeg;base64,' + base64,
+          itemName: itemName,
+          itemDescription: itemDescription,
+          itemPrice: parseFloat(itemPrice),
+          itemImage: base64 ? 'data:image/jpeg;base64,' + base64 : base64,
         });
         let itemList = useItemStore.getState().items;
-        itemList = itemList.map((item) => {
-          if (item._id !== props.itemSelected?._id) return item;
-          else {
-            return {
-              _id: props.itemSelected && props.itemSelected._id,
-              name: name,
-              description: description,
-              price: parseFloat(price),
-              image: 'data:image/jpeg;base64,' + base64,
-            };
-          }
-        });
-        useItemStore.setState({ items: itemList });
+        if (props.itemSelected) {
+          itemList = itemList.map((item) => {
+            if (item._id !== props.itemSelected?._id) return item;
+            else {
+              return {
+                _id: props.itemSelected && props.itemSelected._id,
+                name: itemName,
+                description: itemDescription,
+                price: parseFloat(itemPrice),
+                image: base64
+                  ? 'data:image/jpeg;base64,' + base64
+                  : props.itemSelected
+                  ? props.itemSelected.image
+                  : '',
+              };
+            }
+          });
+          useItemStore.setState({ items: itemList });
+        }
       } catch (error) {}
     } else {
       try {
@@ -98,9 +114,6 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
       setItemName(props.itemSelected.name);
       setItemDescription(props.itemSelected.description);
       setItemPrice(props.itemSelected.price.toString());
-      if (props.itemSelected.image === '') {
-        setFileError(true);
-      }
     }
   }, []);
 
@@ -127,7 +140,9 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
             justify="center"
           >
             <VStack>
-              <FormControl isInvalid={!!errors.name?.message}>
+              <FormControl
+                isInvalid={!!errors.name?.message && itemName.length === 0}
+              >
                 <FormLabel>Item</FormLabel>
                 <Input
                   w="400px"
