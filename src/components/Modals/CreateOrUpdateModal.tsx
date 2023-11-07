@@ -273,21 +273,19 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                         ? e.currentTarget.files[0]
                         : undefined
                     );
-                    e.currentTarget.files &&
-                    (e.currentTarget.files[0].size / 1024 / 1024)
-                      .toFixed(4)
-                      .toString() <= '1'
+                    const smallFile = (+e.currentTarget.files[0].size) <= (50 * 1024); // 50kB
+                    e.currentTarget.files && smallFile
                       ? setFileError(false)
                       : setFileError(true);
                   }}
                 />
                 <FormErrorMessage mt="0">
                   {fileError && !props.itemSelected && itemImage
-                    ? 'Foto deve ser menor que 1MB'
-                    : 'Foto é obrigatória'}
+                    ? 'A foto deve ser menor que 50kB'
+                    : 'A foto é obrigatória'}
                   {fileError &&
                     props.itemSelected &&
-                    'Foto deve ser menor que 1MB'}
+                    'A foto deve ser menor que 50kB'}
                 </FormErrorMessage>
               </FormControl>
             </VStack>
