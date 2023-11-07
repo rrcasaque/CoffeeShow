@@ -26,8 +26,8 @@ import { convertToBase64 } from '@/utils/convert/convertToBase64';
 import { useItemStore } from '@/context/ItemStore';
 
 interface CreateOrUpdateModalProps {
-onClose: () => void;
-itemSelected?: Item;
+  onClose: () => void;
+  itemSelected?: Item;
 }
 
 export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
@@ -38,6 +38,8 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
   const [fileError, setFileError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+
+  const items = useItemStore().items;
 
   const {
     handleSubmit,
@@ -68,7 +70,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           itemPrice: parseFloat(itemPrice),
           itemImage: base64 ? 'data:image/jpeg;base64,' + base64 : base64,
         });
-        let itemList = useItemStore.getState().items;
+        let itemList = items;
         if (props.itemSelected) {
           itemList = itemList.map((item) => {
             if (item._id !== props.itemSelected?._id) return item;
@@ -94,7 +96,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           status: 'success',
           duration: 5000,
           isClosable: true,
-        })
+        });
       } catch (error) {
         props.onClose();
         toast({
@@ -102,7 +104,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           status: 'error',
           duration: 5000,
           isClosable: true,
-        })
+        });
       }
     } else {
       try {
@@ -121,7 +123,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           itemImage: 'data:image/jpeg;base64,' + base64,
         });
 
-        const itemList = useItemStore.getState().items;
+        const itemList = items;
         itemList.push({
           _id: insertedItem.data.item._id,
           name: name,
@@ -136,7 +138,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           status: 'success',
           duration: 5000,
           isClosable: true,
-        })
+        });
       } catch (error) {
         props.onClose();
         toast({
@@ -144,7 +146,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           status: 'error',
           duration: 5000,
           isClosable: true,
-        })
+        });
       }
     }
     setIsLoading(false);
@@ -168,14 +170,15 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
         <Flex
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit(()=>{
-              if (!itemImage && !props.itemSelected || fileError) setFileError(true)
+            handleSubmit(() => {
+              if ((!itemImage && !props.itemSelected) || fileError)
+                setFileError(true);
               else
-              onSubmit({
-                name: itemName,
-                price: itemPrice,
-                description: itemDescription,
-            })
+                onSubmit({
+                  name: itemName,
+                  price: itemPrice,
+                  description: itemDescription,
+                });
             })();
           }}
           w="full"
@@ -258,7 +261,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 )}
                 <Input
                   type="file"
-                  accept='.jpg, .png, .jpeg'
+                  accept=".jpg, .png, .jpeg"
                   w="400px"
                   marginTop="1"
                   {...register('image')}
@@ -268,14 +271,21 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                         ? e.currentTarget.files[0]
                         : undefined
                     );
-                    e.currentTarget.files && (((e.currentTarget.files[0].size/1024)/1024).toFixed(4)).toString() <= "1"
+                    e.currentTarget.files &&
+                    (e.currentTarget.files[0].size / 1024 / 1024)
+                      .toFixed(4)
+                      .toString() <= '1'
                       ? setFileError(false)
-                      : setFileError(true)
+                      : setFileError(true);
                   }}
                 />
                 <FormErrorMessage mt="0">
-                  {fileError && !props.itemSelected && itemImage? 'Foto deve ser menor que 1MB' : 'Foto é obrigatória'}
-                  {fileError && props.itemSelected && 'Foto deve ser menor que 1MB'}
+                  {fileError && !props.itemSelected && itemImage
+                    ? 'Foto deve ser menor que 1MB'
+                    : 'Foto é obrigatória'}
+                  {fileError &&
+                    props.itemSelected &&
+                    'Foto deve ser menor que 1MB'}
                 </FormErrorMessage>
               </FormControl>
             </VStack>
