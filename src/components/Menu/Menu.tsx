@@ -2,16 +2,18 @@ import { useItemStore } from '@/context/ItemStore';
 import { Flex, Spinner } from '@chakra-ui/react';
 import { ItemCard } from '../ItemCard/ItemCard';
 import { useEffect, useState } from 'react';
-import { Item } from '@/models/Item';
 import axios from 'axios';
+import { Item } from '@/models/Item';
 
 export const Menu = () => {
-  const [items, setItems] = useState<Item[]>();
+  const [item, setItem] = useState<Item[]>();
+  const items = useItemStore().items;
 
   useEffect(() => {
     (async () => {
       const response = await axios.get('/api/read');
-      setItems(response.data);
+      useItemStore.setState({ items: response.data });
+      setItem(response.data);
     })();
   }, []);
 
@@ -22,10 +24,10 @@ export const Menu = () => {
       ml="320px"
       wrap="wrap"
       justify="center"
-      align={items ? 'flex-start' : 'center'}
+      align={item ? 'flex-start' : 'center'}
       backgroundImage="/rusticWoodBackground.png"
     >
-      {items ? (
+      {item ? (
         items.map((item) => {
           return (
             <ItemCard
