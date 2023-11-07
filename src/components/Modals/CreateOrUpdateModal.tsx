@@ -69,6 +69,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           itemDescription: itemDescription,
           itemPrice: parseFloat(itemPrice),
           itemImage: base64 ? 'data:image/jpeg;base64,' + base64 : base64,
+          timeout: 10000,
         });
         let itemList = items;
         if (props.itemSelected) {
@@ -114,6 +115,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
           itemDescription: description,
           itemPrice: parseFloat(price),
           itemImage: 'data:image/jpeg;base64,' + base64,
+          timeout: 10000,
         });
 
         console.log({

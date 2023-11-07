@@ -36,6 +36,7 @@ export const DeleteModal = (props: DeleteModalProps) => {
                 await axios.delete('/api/delete', {
                   data: {
                     itemID: props.id,
+                    timeout: 10000,
                   },
                 });
                 const updatedList = useItemStore

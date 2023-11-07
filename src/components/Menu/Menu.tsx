@@ -11,7 +11,9 @@ export const Menu = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get('/api/read');
+      const response = await axios.get('/api/read', {
+        timeout: 10000,
+      });
       useItemStore.setState({ items: response.data });
       setItem(response.data);
     })();
