@@ -21,3 +21,5 @@ export default function Home(
     </ChakraProvider>
   );
 }
+
+//Trying to understand the language and code......
