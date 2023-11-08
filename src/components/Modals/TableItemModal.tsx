@@ -1,6 +1,6 @@
-import { Item } from '@/models/Item';
 import {
   Box,
+  Flex,
   ModalBody,
   ModalCloseButton,
   ModalContent,
@@ -32,9 +32,15 @@ export const TableItemModal = (props: TableItemModalPorps) => {
   const itemsList = useItemStore.getState().items;
 
   return (
-    <ModalContent minW="1000px">
+    <ModalContent
+      w={{ base: '95vw', sm: '95vw' }}
+      minW={{ md: '1000px', lg: '1000px', xl: '1000px' }}
+      whiteSpace={{ base: 'nowrap', sm: 'nowrap', md: 'normal', lg: 'normal' }}
+      overflow={{ base: 'auto', sm: 'auto', md: 'visible', lg: 'visible' }}
+    >
       <ModalHeader>Itens cadastrados</ModalHeader>
       <ModalCloseButton />
+
       <ModalBody w="full" flexDirection="column">
         <Table>
           <Thead>
@@ -88,9 +94,7 @@ export const TableItemModal = (props: TableItemModalPorps) => {
                               />
                             );
                       }}
-                      bg={
-                        props.modalType === 'delete' ? 'red.400' : 'blue.500'
-                      }
+                      bg={props.modalType === 'delete' ? 'red.400' : 'blue.500'}
                       fontSize="16px"
                       align="center"
                       py="4px"
