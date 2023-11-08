@@ -11,7 +11,9 @@ export const Menu = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await axios.get('/api/read');
+      const response = await axios.get('/api/read', {
+        timeout: 10000,
+      });
       useItemStore.setState({ items: response.data });
       setItem(response.data);
     })();
@@ -20,8 +22,12 @@ export const Menu = () => {
   return (
     <Flex
       minH="100vh"
-      w="full"
-      ml="320px"
+      w={{
+        sm: 'full',
+        md: 'calc(100vw - 320px)',
+        lg: 'calc(100vw - 320px)',
+      }}
+      ml={{ sm: '', md: '320px', lg: '320px' }}
       wrap="wrap"
       justify="center"
       align={item ? 'flex-start' : 'center'}

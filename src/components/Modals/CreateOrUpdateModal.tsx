@@ -161,7 +161,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
   }, []);
 
   return (
-    <ModalContent minW="800px">
+    <ModalContent w={{ base: '95vw', sm: '95vw', md: '800px', lg: '800px' }}>
       <ModalHeader>
         {props.itemSelected ? 'Editar Registro' : 'Criar Registro'}
       </ModalHeader>
@@ -200,7 +200,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
               >
                 <FormLabel>Item</FormLabel>
                 <Input
-                  w="400px"
+                  w={{ base: '100%', sm: '100%', md: '400px', lg: '400px' }}
                   marginTop="1"
                   {...register('name')}
                   value={itemName}
@@ -215,7 +215,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
               <FormControl isInvalid={!!errors.description?.message}>
                 <FormLabel>Descrição</FormLabel>
                 <Input
-                  w="400px"
+                  w={{ base: '100%', sm: '100%', md: '400px', lg: '400px' }}
                   marginTop="1"
                   {...register('description')}
                   value={itemDescription}
@@ -231,7 +231,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 <FormLabel>Preço</FormLabel>
                 <Input
                   type="number"
-                  w="400px"
+                  w={{ base: '100%', sm: '100%', md: '400px', lg: '400px' }}
                   marginTop="1"
                   {...register('price')}
                   value={itemPrice}
@@ -262,7 +262,7 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 <Input
                   type="file"
                   accept=".jpg, .png, .jpeg"
-                  w="400px"
+                  w={{ base: '100%', sm: '100%', md: '400px', lg: '400px' }}
                   marginTop="1"
                   {...register('image')}
                   onChange={(e) => {
@@ -272,20 +272,18 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                         : undefined
                     );
                     e.currentTarget.files &&
-                    (e.currentTarget.files[0].size / 1024 / 1024)
-                      .toFixed(4)
-                      .toString() <= '1'
+                    e.currentTarget.files[0].size / 1024 <= 50
                       ? setFileError(false)
                       : setFileError(true);
                   }}
                 />
                 <FormErrorMessage mt="0">
                   {fileError && !props.itemSelected && itemImage
-                    ? 'Foto deve ser menor que 1MB'
-                    : 'Foto é obrigatória'}
+                    ? 'A foto deve ser menor que 50kB'
+                    : 'A foto é obrigatória'}
                   {fileError &&
                     props.itemSelected &&
-                    'Foto deve ser menor que 1MB'}
+                    'A Foto deve ser menor que 50kB'}
                 </FormErrorMessage>
               </FormControl>
             </VStack>
