@@ -261,7 +261,6 @@ export const CreateOrUpdateModal = (props: CreateOrUpdateModalProps) => {
                 )}
                 <Input
                   type="file"
-                  accept=".jpg, .png, .jpeg"
                   w="400px"
                   marginTop="1"
                   {...register('image')}
