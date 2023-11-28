@@ -44,5 +44,18 @@ public class EditTest {
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             assertThat(modal).isNotNull();
         }
+
+        @Test
+        @DisplayName("Should close edit modal after click on close button")
+        void shouldCloseEditModalAfterClickOnFecharButton(){
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("update")));
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            WebElement primeiroBotao = modal.findElement(By.tagName("button"));
+            primeiroBotao.click();
+            assertThrows(NoSuchElementException.class, () -> {
+                driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            });
+        }
     }
 }
