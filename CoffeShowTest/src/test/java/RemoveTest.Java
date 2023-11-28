@@ -46,5 +46,18 @@ public class RemoveTest {
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             assertThat(modal).isNotNull();
         }
+
+        @DisplayName("Should close remove modal after click on close button")
+        void shouldCloseRemoveModalAfterClickOnFecharButton(){
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+
+            WebElement primeiroBotao = modal.findElement(By.tagName("button"));
+            primeiroBotao.click();
+            assertThrows(NoSuchElementException.class, () -> {
+                driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            });
+        }
     }
 }
