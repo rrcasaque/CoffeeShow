@@ -1,0 +1,50 @@
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public class RemoveTest {
+    WebDriver driver;
+    WebDriverWait wait;
+    @BeforeEach
+    void setUp() {
+        driver = new FirefoxDriver();
+        WebDriverManager.firefoxdriver().setup();
+        driver.get("https://coffee-show.vercel.app/");
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    @AfterEach
+    void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @Nested
+    @DisplayName("Remove Modal Tests")
+    class RemoveModalTests{
+        @Test
+        @DisplayName("Should open remove modal after click on remove item button")
+        void shouldOpenEditModalAfterClickOnEditarItemButton(){
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            assertThat(modal).isNotNull();
+        }
+    }
+}
