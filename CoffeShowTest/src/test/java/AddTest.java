@@ -68,5 +68,14 @@ class AddTest {
                     driver.findElement(By.id("chakra-modal-:R1qpf6:"))
             );
         }
+        @Test
+        @DisplayName("Should alert if form is empty after click on Criar button")
+        void shouldAlertEmptyFormAfterClickOnCriarButton() throws InterruptedException {
+            driver.findElement(By.id("create")).click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            driver.findElement(By.cssSelector(".chakra-button.css-1lp2lqs")).click();
+            WebElement errorDiv = driver.findElement(By.className("chakra-form__error-message"));
+            assertThat(errorDiv).isNotNull();
+        }
     }
 }
