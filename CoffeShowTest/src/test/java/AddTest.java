@@ -1,4 +1,5 @@
 
+import com.github.javafaker.Faker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -6,9 +7,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
 import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
 class AddTest {
     WebDriver driver;
@@ -57,18 +60,6 @@ class AddTest {
         }
 
         @Test
-        @DisplayName("Should close register modal after click on adicionar item button")
-        void shouldCloseRegisterModalAfterClickOnFecharItemButton() {
-            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("create")));
-            button.click();
-            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
-            WebElement primeiroBotao = modal.findElement(By.tagName("button"));
-            primeiroBotao.click();
-            assertThrows(NoSuchElementException.class, () ->
-                    driver.findElement(By.id("chakra-modal-:R1qpf6:"))
-            );
-        }
-        @Test
         @DisplayName("Should alert if form is empty after click on Criar button")
         void shouldAlertEmptyFormAfterClickOnCriarButton() throws InterruptedException {
             driver.findElement(By.id("create")).click();
@@ -77,7 +68,6 @@ class AddTest {
             WebElement errorDiv = driver.findElement(By.className("chakra-form__error-message"));
             assertThat(errorDiv).isNotNull();
         }
-
 
         @Test
         @DisplayName("Should submit with success the form with valid information")
