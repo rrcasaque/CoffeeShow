@@ -17,7 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RemoveTest {
+class RemoveTest {
     WebDriver driver;
     WebDriverWait wait;
     @BeforeEach
