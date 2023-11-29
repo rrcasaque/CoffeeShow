@@ -70,5 +70,18 @@ public class RemoveTest {
             WebElement itemModal = driver.findElement(By.id("chakra-modal-:r3:"));
             assertThat(itemModal).isNotNull();
         }
+        @Test
+        @DisplayName("Should remove item with success after click on delete button")
+        void shouldRemoveItemWithSuccessAfterClickOnDeleteButton() throws InterruptedException {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
+            Thread.sleep(3000);
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
+            WebElement deletarButtonModal = wait.until(ExpectedConditions.elementToBeClickable(By.className("chakra-button")));
+            deletarButtonModal.click();
+            WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
+            assertThat(toast.getText()).isEqualTo("Item deletado com sucesso!");
+        }
     }
 }
