@@ -75,8 +75,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         void shouldShowSuccessToastAfterClickOnEditarButtonInsideItemModal() throws InterruptedException {
             Thread.sleep(2000);
             driver.findElement(By.id("update")).click();
-            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
-            driver.findElement(By.id("654a8d343d0dd8dbca7a6bf3")).click();
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
+            button.click();
             WebElement itemModal = driver.findElement(By.id("chakra-modal-:r3:"));
             itemModal.findElement(By.className("chakra-button")).click();
             WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
