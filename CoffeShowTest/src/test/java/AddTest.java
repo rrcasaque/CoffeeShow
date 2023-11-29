@@ -77,5 +77,31 @@ class AddTest {
             WebElement errorDiv = driver.findElement(By.className("chakra-form__error-message"));
             assertThat(errorDiv).isNotNull();
         }
+
+
+        @Test
+        @DisplayName("Should submit with success the form with valid information")
+        void shouldSubmitWithSuccessFormWithValidInformation(){
+            Faker faker = new Faker();
+            String beer = faker.beer().name();
+            String beerDesc = faker.beer().style();
+            String price = faker.commerce().price(5.00, 25.00);
+
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("create")));
+            button.click();
+            WebElement itemNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("field-:r2:")));
+            itemNameInput.sendKeys(beer);
+            WebElement itemDescriptionInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("field-:r3:")));
+            itemDescriptionInput.sendKeys(beerDesc);
+            WebElement itemPriceInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("field-:r4:")));
+            itemPriceInput.sendKeys(price);
+            WebElement inputImagem = wait.until(ExpectedConditions.visibilityOfElementLocated((By.id("field-:r5:"))));
+            String imagePath = new File("src/test/resources/beer.jpg").getAbsolutePath();
+            inputImagem.sendKeys(imagePath);
+            WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".chakra-button")));
+            submitButton.click();
+            WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
+            assertThat(toast.getText()).isEqualTo("Item adicionado com sucesso!");
+        }
     }
 }
