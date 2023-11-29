@@ -59,5 +59,16 @@ public class RemoveTest {
                 driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             });
         }
+        @Test
+        @DisplayName("Should open remove item modal after click on delete button")
+        void shouldOpenRemoveItemModalAfterClickOnDeleteButton() throws InterruptedException {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
+            Thread.sleep(3000);
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
+            WebElement itemModal = driver.findElement(By.id("chakra-modal-:r3:"));
+            assertThat(itemModal).isNotNull();
+        }
     }
 }
