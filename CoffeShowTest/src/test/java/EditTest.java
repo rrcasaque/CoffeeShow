@@ -81,5 +81,22 @@ public class EditTest {
             WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
             assertThat(toast.getText()).isEqualTo("Item alterado com sucesso!");
         }
+        @Test
+        @DisplayName("Should edit text after click on edit button")
+        void shouldEditTextAfterClickOnEditButton() throws InterruptedException {
+            Faker faker = new Faker();
+            String beer = faker.beer().name();
+            Thread.sleep(3000);
+            driver.findElement(By.id("update")).click();
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
+            button.click();
+            WebElement itemModal = driver.findElement(By.id("chakra-modal-:r3:"));
+            WebElement itemNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='chakra-modal--body-:r3:']//input[1]")));
+            itemNameInput.clear();
+            itemNameInput.sendKeys(beer);
+            itemModal.findElement(By.className("chakra-button")).click();
+            WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
+            assertThat(toast.getText()).isEqualTo("Item alterado com sucesso!");
+        }
     }
 }
