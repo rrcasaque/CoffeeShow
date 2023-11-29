@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         WebDriverManager.firefoxdriver().setup();
         driver.get("https://coffee-show.vercel.app/");
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("css-qxf19h")));
     }
 
     @AfterEach
@@ -60,9 +62,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         }
         @Test
         @DisplayName("Should open edit item modal after click on editar item button and select item to edit")
-        void shouldOpenEditItemModalAfterClickOnEditarItemButtonAndSelectItem() throws InterruptedException {
+        void shouldOpenEditItemModalAfterClickOnEditarItemButtonAndSelectItem(){
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("update")));
-            Thread.sleep(2000);
             button.click();
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             modal.findElement(By.xpath("//td[p[text()='Editar']]")).click();
@@ -72,8 +73,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
         @Test
         @DisplayName("Should show success toast after click on editar button inside item modal")
-        void shouldShowSuccessToastAfterClickOnEditarButtonInsideItemModal() throws InterruptedException {
-            Thread.sleep(2000);
+        void shouldShowSuccessToastAfterClickOnEditarButtonInsideItemModal(){
             driver.findElement(By.id("update")).click();
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
             button.click();
@@ -84,10 +84,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         }
         @Test
         @DisplayName("Should edit text after click on edit button")
-        void shouldEditTextAfterClickOnEditButton() throws InterruptedException {
+        void shouldEditTextAfterClickOnEditButton(){
             Faker faker = new Faker();
             String beer = faker.beer().name();
-            Thread.sleep(3000);
             driver.findElement(By.id("update")).click();
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
             button.click();

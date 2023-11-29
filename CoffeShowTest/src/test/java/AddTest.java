@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -23,6 +24,7 @@ class AddTest {
         WebDriverManager.firefoxdriver().setup();
         driver.get("https://coffee-show.vercel.app/");
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("css-qxf19h")));
     }
 
     @AfterEach
@@ -61,7 +63,7 @@ class AddTest {
 
         @Test
         @DisplayName("Should alert if form is empty after click on Criar button")
-        void shouldAlertEmptyFormAfterClickOnCriarButton() throws InterruptedException {
+        void shouldAlertEmptyFormAfterClickOnCriarButton(){
             driver.findElement(By.id("create")).click();
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             driver.findElement(By.cssSelector(".chakra-button.css-1lp2lqs")).click();
@@ -96,8 +98,7 @@ class AddTest {
 
         @Test
         @DisplayName("Should alert if any input of form is empty after click on editar button")
-        void shouldAlertIfAnyInputOfFormIsEmptyAfterClickOnEditarButton() throws InterruptedException {
-            Thread.sleep(3000);
+        void shouldAlertIfAnyInputOfFormIsEmptyAfterClickOnEditarButton(){
             driver.findElement(By.id("update")).click();
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
             button.click();

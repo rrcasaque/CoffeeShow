@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +27,7 @@ class RemoveTest {
         WebDriverManager.firefoxdriver().setup();
         driver.get("https://coffee-show.vercel.app/");
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("css-qxf19h")));
     }
 
     @AfterEach
@@ -46,7 +48,7 @@ class RemoveTest {
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             assertThat(modal).isNotNull();
         }
-
+        @Test
         @DisplayName("Should close remove modal after click on close button")
         void shouldCloseRemoveModalAfterClickOnFecharButton(){
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
@@ -61,9 +63,8 @@ class RemoveTest {
         }
         @Test
         @DisplayName("Should open remove item modal after click on delete button")
-        void shouldOpenRemoveItemModalAfterClickOnDeleteButton() throws InterruptedException {
+        void shouldOpenRemoveItemModalAfterClickOnDeleteButton(){
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
-            Thread.sleep(3000);
             button.click();
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
@@ -72,9 +73,8 @@ class RemoveTest {
         }
         @Test
         @DisplayName("Should remove item with success after click on delete button")
-        void shouldRemoveItemWithSuccessAfterClickOnDeleteButton() throws InterruptedException {
+        void shouldRemoveItemWithSuccessAfterClickOnDeleteButton(){
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
-            Thread.sleep(3000);
             button.click();
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
@@ -85,9 +85,8 @@ class RemoveTest {
         }
         @Test
         @DisplayName("Should close delete confirmation modal after click on close button")
-        void shouldCloseDeleteConfirmationModalAterClickOnCloseBUtton() throws InterruptedException {
+        void shouldCloseDeleteConfirmationModalAterClickOnCloseBUtton(){
             WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
-            Thread.sleep(3000);
             button.click();
             WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
             modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
