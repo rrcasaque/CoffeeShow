@@ -103,5 +103,20 @@ class AddTest {
             WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
             assertThat(toast.getText()).isEqualTo("Item adicionado com sucesso!");
         }
+
+        @Test
+        @DisplayName("Should alert if any input of form is empty after click on editar button")
+        void shouldAlertIfAnyInputOfFormIsEmptyAfterClickOnEditarButton() throws InterruptedException {
+            Thread.sleep(3000);
+            driver.findElement(By.id("update")).click();
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//td[5]//p")));
+            button.click();
+            WebElement itemModal = driver.findElement(By.id("chakra-modal-:r3:"));
+            WebElement itemNameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='chakra-modal--body-:r3:']//input[1]")));
+            itemNameInput.clear();
+            itemModal.findElement(By.className("chakra-button")).click();
+            WebElement errorDiv = driver.findElement(By.className("chakra-form__error-message"));
+            assertThat(errorDiv).isNotNull();
+        }
     }
 }
