@@ -83,5 +83,19 @@ public class RemoveTest {
             WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("toast-1-title")));
             assertThat(toast.getText()).isEqualTo("Item deletado com sucesso!");
         }
+        @Test
+        @DisplayName("Should close delete confirmation modal after click on close button")
+        void shouldCloseDeleteConfirmationModalAterClickOnCloseBUtton() throws InterruptedException {
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.id("delete")));
+            Thread.sleep(3000);
+            button.click();
+            WebElement modal = driver.findElement(By.id("chakra-modal-:R1qpf6:"));
+            modal.findElement(By.xpath("//td[p[text()='Deletar']]")).click();
+            List<WebElement> closeButtons = driver.findElements(By.className("chakra-modal__close-btn"));
+            closeButtons.get(1).click();
+            List<WebElement> modals = driver.findElements(By.className("chakra-modal__content-container"));
+            assertThrows(IndexOutOfBoundsException.class, () -> {
+                modals.get(1);});
+        }
     }
 }
